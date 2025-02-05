@@ -1,0 +1,15 @@
+device: cuda
+
+storage:
+  weights: /ml/Imagn/models/llama_unsloth_graded_350_350
+  player_info: /ml/Imagn/nfl_player_info.json
+container:
+  weights: weights 
+  player_info: player_info.json
+
+model:
+  teams: 
+    - Kansas City Chiefs
+    - Philadelphia Eagles
+  fps: 0.5
+  allow_single_frame: true
