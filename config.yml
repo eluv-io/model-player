@@ -3,9 +3,13 @@ device: cuda
 storage:
   weights: /ml/Imagn/models/llama_unsloth_graded_350_350
   player_info: /ml/Imagn/nfl_player_info.json
+  player_map: /ml/Imagn/train_data/source_files/nfl_player_map.json
+
 container:
-  weights: weights 
+  detection weights: detection_wts
+  caption weights: caption_wts 
   player_info: player_info.json
+  player_map: player_map.json
 
 model:
   teams: 
