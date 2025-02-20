@@ -68,18 +68,24 @@ def run(file_paths: List[str], runtime_config: str=None):
     for fname in file_paths:
         if not os.path.exists(fname):
             raise FileNotFoundError(f"File {fname} not found")
-        if not get_file_type(fname) == 'image':
-            raise ValueError(f"File {fname} is not an image. Player Detection currently only supports image inputs.")
-        img = cv2.imread(fname)
-        # change color space to RGB
-        img = img[:, :, ::-1]
-         # get xmp data from image
-        headline = extract_xmp_as_dict(fname).get('Headline', '')
-        model.set_headline(headline)
-        frametags = model.tag(img)
-        with open(os.path.join(out_path, f"{os.path.basename(fname)}_imagetags.json"), 'w') as fout:
-            fout.write(json.dumps([asdict(tag) for tag in frametags]))
-        
+        if get_file_type(fname) == 'image':
+            img = cv2.imread(fname)
+            # change color space to RGB
+            img = img[:, :, ::-1]
+            # get xmp data from image
+            headline = extract_xmp_as_dict(fname).get('Headline', '')
+            model.set_headline(headline)
+            frametags = model.tag(img)
+            with open(os.path.join(out_path, f"{os.path.basename(fname)}_imagetags.json"), 'w') as fout:
+                fout.write(json.dumps([asdict(tag) for tag in frametags]))
+        else:
+            ftags, tags = model.tag_video(fname)
+            with open(os.path.join(out_path, f"{os.path.basename(fname)}_tags.json"), 'w') as fout:
+                fout.write(json.dumps([asdict(tag) for tag in tags]))
+            with open(os.path.join(out_path, f"{os.path.basename(fname)}_frametags.json"), 'w') as fout:
+                ftags = {k: [asdict(tag) for tag in v] for k, v in ftags.items()}
+                fout.write(json.dumps(ftags))
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('file_paths', nargs='+', type=str)
