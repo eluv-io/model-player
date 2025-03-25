@@ -9,11 +9,13 @@ fi
 
 SCRIPT_PATH="$(dirname "$(realpath "$0")")"
 MODEL_PATH=$(yq -r .storage.weights $SCRIPT_PATH/config.yml)
-rm -rf $SCRIPT_PATH/weights
-cp -r $MODEL_PATH $SCRIPT_PATH/weights
+
+rsync --progress --update --times --recursive --links --delete $MODEL_PATH/ $SCRIPT_PATH/weights/
+
 
 PLAYER_LIST=$(yq -r .storage.player_info $SCRIPT_PATH/config.yml)
 rm -rf $SCRIPT_PATH/player_info.json
+
 cp $PLAYER_LIST $SCRIPT_PATH/player_info.json
 
-podman build --format docker -t player . --network host --build-arg SSH_AUTH_SOCK=$SSH_AUTH_SOCK --volume "${SSH_AUTH_SOCK}:${SSH_AUTH_SOCK}"
+podman build --format docker -t player . --network host --build-arg SSH_AUTH_SOCK=/tmp/ssh-auth-sock --volume "${SSH_AUTH_SOCK}:/tmp/ssh-auth-sock"
