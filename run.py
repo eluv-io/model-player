@@ -9,6 +9,7 @@ from common_ml.utils.files import get_file_type
 import re
 import xml.etree.ElementTree as ET
 from dataclasses import asdict
+import setproctitle
 
 from src.model import PlayerModel
 from config import config
@@ -87,6 +88,7 @@ def run(file_paths: List[str], runtime_config: str=None):
                 fout.write(json.dumps(ftags))
 
 if __name__ == '__main__':
+    setproctitle.setproctitle("model-player")
     parser = argparse.ArgumentParser()
     parser.add_argument('file_paths', nargs='+', type=str)
     parser.add_argument('--config', type=str, required=False)

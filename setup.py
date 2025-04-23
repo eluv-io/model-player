@@ -7,6 +7,7 @@ setup(
     install_requires=[
         'marshmallow',
         'unsloth',
+        'setproctitle',
         'common_ml @ git+ssh://git@github.com/qluvio/common-ml.git#egg=common_ml',
     ]
 )
