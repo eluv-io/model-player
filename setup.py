@@ -8,6 +8,6 @@ setup(
         'marshmallow',
         'unsloth',
         'setproctitle',
-        'common_ml @ git+ssh://git@github.com/qluvio/common-ml.git#egg=common_ml',
+        'common_ml @ git+ssh://git@github.com/eluv-io/common-ml.git#egg=common_ml',
     ]
 )
